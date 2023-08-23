@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Agenda de contatos</string>
+    <string name="agenda_contato_lbl_nome">Nome Completo</string>
+    <string name="agenda_contato_lbl_email">Email</string>
+    <string name="agenda_contato_lbl_tel">Telefone</string>
+    <string name="agenda_contato_btn_mostrar">Mostrar na Log</string>
+</resources>
