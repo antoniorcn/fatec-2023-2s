@@ -19,22 +19,10 @@ public class MeuAdapter extends
     private Context context;
     private LayoutInflater inflater;
 
-    public MeuAdapter(Context context) {
-        Contato c1 = new Contato();
-        c1.nome = "Joao Silva";
-        c1.telefone = "(11) 1111-1111";
-        c1.email = "joao@teste.com";
-
-        Contato c2 = new Contato();
-        c2.nome = "Maria Silva";
-        c2.telefone = "(11) 2222-2222";
-        c2.email = "maria@teste.com";
-
-        lista.add(c1);
-        lista.add(c2);
-
+    public MeuAdapter(Context context, List<Contato> contatos) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
+        this.lista = contatos;
     }
     @NonNull
     @Override
