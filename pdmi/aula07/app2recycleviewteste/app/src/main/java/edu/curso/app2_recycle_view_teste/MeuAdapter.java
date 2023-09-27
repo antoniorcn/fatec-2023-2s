@@ -1,4 +1,4 @@
-package edu.curso.app1;
+package edu.curso.app2_recycle_view_teste;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,8 +16,7 @@ public class MeuAdapter extends
         RecyclerView.Adapter<MeuAdapter.ViewHolder>{
 
     private List<Contato> lista = new ArrayList<>();
-    private Context context;
-    private LayoutInflater inflater;
+    private LayoutInflater mInflater;
 
     public MeuAdapter(Context context) {
         Contato c1 = new Contato();
@@ -33,36 +32,29 @@ public class MeuAdapter extends
         lista.add(c1);
         lista.add(c2);
 
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context);
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.contato_item_layout, parent, false);
+        View view = mInflater.inflate(R.layout.contato_item_layout, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Contato c = lista.get(position);
-        holder.txtNome.setText( c.nome );
-        holder.txtTelefone.setText( c.telefone );
-        holder.txtEmail.setText( c.email );
+        holder.txtTelefone.setText(c.telefone);
+        holder.txtEmail.setText(c.email);
+        holder.txtNome.setText(c.nome);
     }
-
-
     @Override
     public int getItemCount() {
         return lista.size();
     }
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtNome;
         TextView txtEmail;
         TextView txtTelefone;
-
         public ViewHolder(View itemView) {
             super(itemView);
             txtNome = itemView.findViewById(R.id.txtNome);
