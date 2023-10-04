@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -16,11 +15,11 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RestauranteDetalhesActivity extends AppCompatActivity {
 
+    public static final String APP_RESTAURANTE = "APP Restaurante";
     private List<Restaurante> restaurantes = new ArrayList<>();
     private EditText txtNome;
     private EditText txtEndereco;
@@ -74,8 +73,10 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
     private void pesquisar() {
         String nome = txtNome.getText().toString();
-
+        Log.d(APP_RESTAURANTE, "Pesquisando restaurante: (" + nome + ")");
         for (Restaurante r : restaurantes) {
+            Log.d(APP_RESTAURANTE, "Restaurante: (" + r.getNome() + ") contém " +
+                    r.getNome().contains( nome ) );
             if (r.getNome().contains( nome )) {
                 txtNome.setText( r.getNome() );
                 txtEndereco.setText( r.getEndereco() );
@@ -90,31 +91,40 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
     private void mostrarLista () {
         for (Restaurante r : restaurantes) {
-            Log.i("APP Restaurante", r.toString());
+            Log.d(APP_RESTAURANTE, r.toString());
         }
     }
 
     private void salvarPrefs() {
-        SharedPreferences shared
+        Log.d(APP_RESTAURANTE, "Salvar Prefs acionado");
+        SharedPreferences sharedPref
                 = getSharedPreferences("RESTAURANTES", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String strLista = gson.toJson(restaurantes);
-        shared.edit().putString("LISTA", strLista);
-        shared.edit().commit();
+        Log.d(APP_RESTAURANTE, "Restaurantes da lista a ser salvo no SharedPref");
+        Log.d(APP_RESTAURANTE, strLista);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("LISTA", strLista);
+        editor.apply();
     }
 
     private void carregarPrefs() {
         SharedPreferences shared
                 = getSharedPreferences("RESTAURANTES", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String strLista = shared.getString("LISTA","");
-
-        Log.i("APP Restaurante", "JSON Lido: " + strLista);
+        String strLista = shared.getString("LISTA","[]");
+        Log.d(APP_RESTAURANTE, "JSON Lido: " + strLista);
         Type listType = new TypeToken<ArrayList<Restaurante>>(){}.getType();
         ArrayList<Restaurante> list = gson.fromJson(strLista, listType);
-        Log.i("APP Restaurante", "Restaurantes da lista lida no SharedPref");
-        for (Restaurante r : list) {
-            Log.i("APP Restaurante", r.toString());
+        if (list != null) {
+            restaurantes.clear();
+            restaurantes.addAll(list);
+        }
+        Log.d(APP_RESTAURANTE, "Restaurantes da lista lida no SharedPref");
+        if (restaurantes != null) {
+            for (Restaurante r : restaurantes) {
+                Log.d(APP_RESTAURANTE, r.toString());
+            }
         }
     }
 }
