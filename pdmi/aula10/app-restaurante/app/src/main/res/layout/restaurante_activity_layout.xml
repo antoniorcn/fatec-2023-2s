@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detalhes Restaurante"
+        android:textAlignment="center"
+        android:textSize="32sp" />
+
+    <EditText
+        android:id="@+id/txtNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nome do restaurante"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/txtEndereco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Endereço"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/txtTipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Tipo da Comida"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/txtClassificacao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Classificacao de 1 a 5"
+        android:inputType="number"
+        android:numeric="integer" />
+
+    <EditText
+        android:id="@+id/txtLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Latitude"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/txtLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Longitude"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/txtDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="171dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Descrição"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/btnSalvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar" />
+
+    <Button
+        android:id="@+id/btnPesquisar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pesquisar" />
+
+</LinearLayout>
