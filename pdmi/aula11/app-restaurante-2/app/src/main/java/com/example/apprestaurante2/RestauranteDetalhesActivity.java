@@ -1,4 +1,4 @@
-package com.example.app.restaurante;
+package com.example.apprestaurante2;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -35,7 +35,6 @@ import okhttp3.Response;
 
 public class RestauranteDetalhesActivity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json");
-
     public static final String APP_RESTAURANTE = "APP Restaurante";
     private List<Restaurante> restaurantes = new ArrayList<>();
     private EditText txtNome;
@@ -87,30 +86,29 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
         restaurantes.add( r );
 
+        String url ="https://fatec-2023-2s-pdmi-default-rtdb.firebaseio.com/restaurantes.json";
+        Gson gson = new Gson();
+        String jsonRestaurante = gson.toJson(r);
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
-
         executor.execute(() -> {
-            //Background work here
             OkHttpClient client = new OkHttpClient();
 
-            String url = "https://fatec-2023-2s-pdmi-default-rtdb.firebaseio.com/restaurantes.json";
-            Gson gson = new Gson();
-            String strRestaurante = gson.toJson(r);
-            RequestBody body = RequestBody.create(strRestaurante, JSON);
+            RequestBody body = RequestBody.create(jsonRestaurante, JSON);
             Request request = new Request.Builder()
                     .url(url)
                     .post(body)
                     .build();
             try (Response response = client.newCall(request).execute()) {
-                if (response.body() != null) {
-                    Log.i(APP_RESTAURANTE, "Response: " + response.body().string());
-                }
+                Log.e(APP_RESTAURANTE, "Resposta: " + response.body().string());
             } catch (IOException e) {
-                Log.e(APP_RESTAURANTE, "Erro ao mandar o POST", e);
+                Log.e(APP_RESTAURANTE, "Erro: ", e);
                 throw new RuntimeException(e);
             }
+
             handler.post(() -> {
+
             });
         });
 

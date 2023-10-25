@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="txtLatitude" type="id" />
+    <item name="txtLongitude" type="id" />
+    <item name="txtDescricao" type="id" />
+    <item name="btnSalvar" type="id" />
+    <item name="btnPesquisar" type="id" />
+    <item name="txtClassificacao" type="id" />
+    <item name="txtTipo" type="id" />
+    <item name="txtEndereco" type="id" />
+    <item name="txtNome" type="id" />
+    <item name="textView" type="id" />
+</resources>
