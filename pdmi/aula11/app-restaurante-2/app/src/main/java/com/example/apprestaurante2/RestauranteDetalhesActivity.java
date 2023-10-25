@@ -1,7 +1,5 @@
 package com.example.apprestaurante2;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,15 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +27,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RestauranteDetalhesActivity extends AppCompatActivity {
+
+    private static final String URL ="https://fatec-2023-2s-pdmi-default-rtdb.firebaseio.com/restaurantes.json";
+
     public static final MediaType JSON = MediaType.get("application/json");
     public static final String APP_RESTAURANTE = "APP Restaurante";
     private List<Restaurante> restaurantes = new ArrayList<>();
@@ -48,6 +44,8 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
     private Button btnSalvar;
 
     private Button btnPesquisar;
+
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,26 +66,10 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
         btnPesquisar.setOnClickListener( e -> pesquisar() );
 
         btnSalvar.setOnClickListener( e -> salvar() );
-        carregarPrefs();
+        carregarFirebase();
     }
 
-    private void salvar() {
-        Restaurante r = new Restaurante();
-        r.setNome(txtNome.getText().toString());
-        r.setEndereco(txtEndereco.getText().toString());
-        r.setTipo(txtTipo.getText().toString());
-        r.setClasse( Integer.parseInt(
-                txtClassificacao.getText().toString()) );
-        r.setLatitude( Double.parseDouble(
-                txtLatitude.getText().toString()) );
-        r.setLongitude( Double.parseDouble(
-                txtLongitude.getText().toString()) );
-        r.setDescricao( txtDescricao.getText().toString() );
-
-        restaurantes.add( r );
-
-        String url ="https://fatec-2023-2s-pdmi-default-rtdb.firebaseio.com/restaurantes.json";
-        Gson gson = new Gson();
+    public void salvarFirebase( Restaurante r ) {
         String jsonRestaurante = gson.toJson(r);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -97,7 +79,7 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
             RequestBody body = RequestBody.create(jsonRestaurante, JSON);
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(URL)
                     .post(body)
                     .build();
             try (Response response = client.newCall(request).execute()) {
@@ -111,9 +93,27 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
             });
         });
+    }
 
+    private Restaurante gerarEntidade() {
+        Restaurante r = new Restaurante();
+        r.setNome(txtNome.getText().toString());
+        r.setEndereco(txtEndereco.getText().toString());
+        r.setTipo(txtTipo.getText().toString());
+        r.setClasse( Integer.parseInt(
+                txtClassificacao.getText().toString()) );
+        r.setLatitude( Double.parseDouble(
+                txtLatitude.getText().toString()) );
+        r.setLongitude( Double.parseDouble(
+                txtLongitude.getText().toString()) );
+        r.setDescricao( txtDescricao.getText().toString() );
+        return r;
+    }
 
-
+    private void salvar() {
+        Restaurante r = gerarEntidade();
+        restaurantes.add( r );
+        salvarFirebase(r);
         mostrarLista();
     }
 
@@ -141,36 +141,30 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
         }
     }
 
-    private void salvarPrefs() {
-        Log.d(APP_RESTAURANTE, "Salvar Prefs acionado");
-        SharedPreferences sharedPref
-                = getSharedPreferences("RESTAURANTES", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String strLista = gson.toJson(restaurantes);
-        Log.d(APP_RESTAURANTE, "Restaurantes da lista a ser salvo no SharedPref");
-        Log.d(APP_RESTAURANTE, strLista);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("LISTA", strLista);
-        editor.apply();
+    private void carregarFirebase() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(()->{
+            restaurantes.clear();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                String resposta = response.body().string();
+                JsonObject convertedObject =
+                        gson.fromJson(resposta, JsonObject.class);
+                for (String chave : convertedObject.keySet()) {
+                    JsonObject obj = convertedObject.getAsJsonObject(chave);
+                    Restaurante r = gson.fromJson(obj, Restaurante.class);
+                    restaurantes.add(r);
+                }
+                Log.e(APP_RESTAURANTE, "Resposta: " + resposta);
+            } catch (IOException e) {
+                Log.e(APP_RESTAURANTE, "Erro: ", e);
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    private void carregarPrefs() {
-        SharedPreferences shared
-                = getSharedPreferences("RESTAURANTES", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String strLista = shared.getString("LISTA","[]");
-        Log.d(APP_RESTAURANTE, "JSON Lido: " + strLista);
-        Type listType = new TypeToken<ArrayList<Restaurante>>(){}.getType();
-        ArrayList<Restaurante> list = gson.fromJson(strLista, listType);
-        if (list != null) {
-            restaurantes.clear();
-            restaurantes.addAll(list);
-        }
-        Log.d(APP_RESTAURANTE, "Restaurantes da lista lida no SharedPref");
-        if (restaurantes != null) {
-            for (Restaurante r : restaurantes) {
-                Log.d(APP_RESTAURANTE, r.toString());
-            }
-        }
-    }
 }
