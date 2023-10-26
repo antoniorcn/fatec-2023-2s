@@ -1,4 +1,4 @@
-package edu.curso;
+package edu.curso.adaptado;
 
 import java.util.ArrayList;
 import java.util.List;

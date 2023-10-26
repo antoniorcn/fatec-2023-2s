@@ -1,4 +1,4 @@
-package edu.curso;
+package edu.curso.assinadas;
 
 public class Contato {
     private String nome;

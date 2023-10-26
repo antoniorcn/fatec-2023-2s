@@ -1,4 +1,4 @@
-package edu.curso;
+package edu.curso.adaptado;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
