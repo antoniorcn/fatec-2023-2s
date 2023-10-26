@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,9 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RestauranteDetalhesActivity extends AppCompatActivity {
-
     private static final String URL ="https://fatec-2023-2s-pdmi-default-rtdb.firebaseio.com/restaurantes.json";
-
     public static final MediaType JSON = MediaType.get("application/json");
     public static final String APP_RESTAURANTE = "APP Restaurante";
     private List<Restaurante> restaurantes = new ArrayList<>();
