@@ -1,5 +1,6 @@
 package com.example.apprestaurante2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,7 @@ public class RestauranteListaActivity extends AppCompatActivity implements Resta
         adapter = new RestauranteRecycleViewAdapter(this, restaurantes, this);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        Context ctx = this.getApplicationContext();
     }
 
     public void removeSingleItem(int removeIndex) {
