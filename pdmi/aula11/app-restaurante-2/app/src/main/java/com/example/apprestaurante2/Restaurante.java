@@ -1,7 +1,8 @@
 package com.example.apprestaurante2;
 
+import java.io.Serializable;
 
-public class Restaurante {
+public class Restaurante implements Serializable {
 
     private long id;
     private String nome;
@@ -12,6 +13,18 @@ public class Restaurante {
     private double longitude;
 
     private String descricao;
+
+    private String chave;
+
+    public Restaurante() {
+
+    }
+
+    public Restaurante(String nome, String tipo, int classe) {
+        this.nome = nome;
+        this.tipo = tipo;
+        this.classe = classe;
+    }
 
     public long getId() {
         return id;
@@ -77,8 +90,17 @@ public class Restaurante {
         this.descricao = descricao;
     }
 
+
+    public String getChave() {
+        return chave;
+    }
+    public void setChave(String chave) {
+        this.chave = chave;
+    }
+
     @Override
     public String toString() {
         return this.nome + " - " + this.tipo + " - " + this.classe;
     }
+
 }

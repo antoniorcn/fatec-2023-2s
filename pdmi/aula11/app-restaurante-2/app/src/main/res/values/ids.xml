@@ -4,7 +4,7 @@
     <item name="txtLongitude" type="id" />
     <item name="txtDescricao" type="id" />
     <item name="btnSalvar" type="id" />
-    <item name="btnPesquisar" type="id" />
+    <item name="btnListar" type="id" />
     <item name="txtClassificacao" type="id" />
     <item name="txtTipo" type="id" />
     <item name="txtEndereco" type="id" />

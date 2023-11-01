@@ -77,9 +77,9 @@
         android:text="Salvar" />
 
     <Button
-        android:id="@+id/btnPesquisar"
+        android:id="@+id/btnListar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pesquisar" />
+        android:text="Listar" />
 
 </LinearLayout>

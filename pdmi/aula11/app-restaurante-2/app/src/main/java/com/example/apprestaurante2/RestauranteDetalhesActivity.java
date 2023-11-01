@@ -1,5 +1,6 @@
 package com.example.apprestaurante2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +42,7 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
     private Button btnSalvar;
 
-    private Button btnPesquisar;
+    private Button btnListar;
 
     private Gson gson = new Gson();
 
@@ -48,7 +50,7 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.restaurante_activity_layout);
+        setContentView(R.layout.restaurante_detalhes_layout);
 
         txtNome = findViewById(R.id.txtNome);
         txtEndereco = findViewById(R.id.txtEndereco);
@@ -59,8 +61,19 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
         txtDescricao = findViewById(R.id.txtDescricao);
 
         btnSalvar = findViewById(R.id.btnSalvar);
-        btnPesquisar = findViewById(R.id.btnPesquisar);
-        btnPesquisar.setOnClickListener( e -> pesquisar() );
+        btnListar = findViewById(R.id.btnListar);
+
+        btnListar.setOnClickListener(
+                e -> {
+                    Bundle b = new Bundle();
+                    b.putSerializable("RESTAURANTES", (Serializable)restaurantes);
+                    Intent it = new Intent( this,
+                            RestauranteListaActivity.class );
+                    it.putExtras( b );
+                    startActivity(it);
+
+                }
+        );
 
         btnSalvar.setOnClickListener( e -> salvar() );
         carregarFirebase();
@@ -154,6 +167,7 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
                 for (String chave : convertedObject.keySet()) {
                     JsonObject obj = convertedObject.getAsJsonObject(chave);
                     Restaurante r = gson.fromJson(obj, Restaurante.class);
+                    r.setChave(chave);
                     restaurantes.add(r);
                 }
                 Log.e(APP_RESTAURANTE, "Resposta: " + resposta);
