@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +22,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.jakewharton.rxbinding3.InitialValueObservable;
+import com.jakewharton.rxbinding3.widget.RxTextView;
+
+import io.reactivex.Observer;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,10 +51,14 @@ public class RestauranteDetalhesActivity extends AppCompatActivity {
 
     private Gson gson = new Gson();
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RxTextView.textChanges(txtNome).subscribe(
 
+        );
         setContentView(R.layout.restaurante_detalhes_layout);
 
         txtNome = findViewById(R.id.txtNome);
