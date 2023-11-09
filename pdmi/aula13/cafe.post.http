@@ -1,0 +1,8 @@
+POST https://backend-pdmi--antoniocarval11.repl.co/cafe HTTP/1.1
+content-type: application/json
+
+{
+    "nome": "Chocotino",
+    "base": "chocolate",
+    "preco": 14.90
+}
