@@ -1,14 +1,21 @@
 package edu.curso;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -24,6 +31,7 @@ public class CursoBoundary extends Application {
 	private DatePicker dtDataEnade = new DatePicker();
 	private Button btnSalvar = new Button("Salvar");
 	private Button btnPesquisar = new Button("Pesquisar");
+	private TableView<Curso> table = new TableView<>();
 	
 	private CursoControl control = new CursoControl(); 
 	
@@ -39,10 +47,50 @@ public class CursoBoundary extends Application {
 //				new LocalDateStringConverter(dtf, dtf));
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void populateTable() { 
+		TableColumn<Curso, String> col1 = new TableColumn<>("Nome do Curso");
+		col1.setCellValueFactory( new PropertyValueFactory<Curso, String>("nomeCurso"));
+		
+		TableColumn<Curso, String> col2 = new TableColumn<>("Codigo do Curso");
+		col2.setCellValueFactory( 
+				itemData -> new ReadOnlyStringWrapper( itemData.getValue().getCodCurso() )
+		);
+		
+		TableColumn<Curso, String> col3 = new TableColumn<>("Qtd. Alunos");
+		col3.setCellValueFactory( 
+				itemData -> new ReadOnlyStringWrapper(
+						String.valueOf( itemData.getValue().getQtdAlunos() ) )
+		);
+		
+		TableColumn<Curso, String> col4 = new TableColumn<>("Data do Enade");
+		col4.setCellValueFactory(
+				itemData -> { 
+					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					LocalDate dt = itemData.getValue().getProximoEnade();
+					String dataStr = dtf.format(dt); 
+					return new ReadOnlyStringWrapper(dataStr); 
+				}
+		);
+		
+		table.getColumns().addAll(col1, col2, col3, col4);
+		table.getSelectionModel().selectedItemProperty().addListener(
+				(obs, antigo, novo) -> { 
+					control.popularTela( novo );
+				}
+		);
+	}
+	
 	@Override
 	public void start(Stage stage) { 
+		BorderPane pane = new BorderPane();
 		GridPane grid = new GridPane();
-		Scene scn = new Scene(grid, 600, 400);
+		grid.setOnMouseClicked(
+				e -> table.getSelectionModel().clearSelection()
+		);
+		pane.setTop(grid);
+		pane.setCenter(table);
+		Scene scn = new Scene(pane, 600, 400);
 				
 		grid.add( new Label("Nome Curso"), 0, 0 );
 		grid.add( txtNomeCurso, 1, 0);
@@ -61,7 +109,9 @@ public class CursoBoundary extends Application {
 		
 		btnPesquisar.setOnAction( e -> control.pesquisar() );
 		
+		table.setItems( control.getLista() );
 		bindings();
+		populateTable();
 		
 		stage.setScene(scn);
 		stage.setTitle("Gestão de Cursos");

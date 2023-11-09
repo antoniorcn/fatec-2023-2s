@@ -10,10 +10,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+ 
 public class CursoControl {
 	
-	private List<Curso> lista = new ArrayList<>();
+	private ObservableList<Curso> lista = FXCollections.observableArrayList();
 	
 	private StringProperty nomeCurso = new SimpleStringProperty("");
 	private StringProperty codigoCurso = new SimpleStringProperty("");
@@ -46,14 +48,19 @@ public class CursoControl {
 		String nome = nomeCurso.get();
 		for (Curso c : lista) { 
 			if (c.getNomeCurso().contains(nome)) { 
-				nomeCurso.set( c.getNomeCurso() );
-				codigoCurso.set( c.getCodCurso() );
-				nomeCoord.set( c.getNomeCoordenador() );
-				qtdAlunos.set( c.getQtdAlunos() );
-				dataEnade.set( c.getProximoEnade() );
+				popularTela( c );
 			}
 		}
-		
+	}
+	
+	public void popularTela( Curso c ) { 
+		if (c != null) {
+			nomeCurso.set( c.getNomeCurso() );
+			codigoCurso.set( c.getCodCurso() );
+			nomeCoord.set( c.getNomeCoordenador() );
+			qtdAlunos.set( c.getQtdAlunos() );
+			dataEnade.set( c.getProximoEnade() );
+		}
 	}
 	
 	
@@ -76,6 +83,10 @@ public class CursoControl {
 	public ObjectProperty<LocalDate> dataEnadeProperty() { 
 		return dataEnade;
 	}	
+	
+	public ObservableList<Curso> getLista() { 
+		return lista;
+	}
 	
 
 }
