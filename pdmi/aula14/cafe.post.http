@@ -1,0 +1,7 @@
+POST https://aula14-backend.antoniocarval11.repl.co/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
+    "password": "123456"
+}
