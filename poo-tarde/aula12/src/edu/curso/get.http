@@ -1,0 +1,2 @@
+GET https://teste-c3018-default-rtdb.asia-southeast1.firebasedatabase.app/cursos.json HTTP/1.1
+

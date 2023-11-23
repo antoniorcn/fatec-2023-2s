@@ -1,0 +1,10 @@
+POST https://teste-c3018-default-rtdb.asia-southeast1.firebasedatabase.app/cursos.json HTTP/1.1
+
+{
+    "id": 1,
+    "nomeCurso": "ADS",
+    "codigoCurso": "ADS",
+    "coordenador": "Luciano",
+    "dataEnade": "2024-11-23",
+    "qtdAlunos": 480
+}
