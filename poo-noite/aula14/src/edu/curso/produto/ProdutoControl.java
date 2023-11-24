@@ -30,6 +30,7 @@ public class ProdutoControl {
 		try { 
 			Class.forName("org.mariadb.jdbc.Driver");
 			con = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
+			procurarProduto();
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}
@@ -54,7 +55,6 @@ public class ProdutoControl {
 		p.setNome(nome.get());
 		p.setCodigo(codigo.get());
 		p.setPreco(preco.get());
-		lista.add(p);
 		
 		try { 
 			String sql = "INSERT INTO produtos (codigo, nome, preco) "
@@ -67,10 +67,14 @@ public class ProdutoControl {
 		} catch(Exception e) { 
 			e.printStackTrace();
 		}
+		
+		nome.set("");
+		codigo.set("");
+		preco.set(0);
+		procurarProduto();
 	}
 	
 	public void procurarProduto() {
-		
 		try { 
 			String sql = "SELECT * FROM produtos WHERE nome LIKE ?";
 			PreparedStatement stmt = con.prepareStatement(sql);
